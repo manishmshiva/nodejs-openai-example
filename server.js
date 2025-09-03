@@ -12,6 +12,11 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Add GET route for root
+app.get('/', (req, res) => {
+  res.send('Welcome to the OpenAI Node.js example');
+});
+
 // Create a simple route to process text
 app.post('/generate', async (req, res) => {
   try {
@@ -22,8 +27,8 @@ app.post('/generate', async (req, res) => {
     // Call OpenAI API for text generation
     const response = await client.responses.create({
       model: "gpt-5",
-      input: "Write a one-sentence bedtime story about a unicorn."
-  });
+      input: prompt
+    });
     // Send response back
     res.json({ output: response.output_text });
   } catch (error) {
@@ -31,6 +36,7 @@ app.post('/generate', async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
+
 // Start the server on a local port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
